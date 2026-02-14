@@ -318,12 +318,13 @@
 
 <script setup>
 import { defineProps, defineEmits, watch, computed } from "vue";
+import { useGameStore } from '@/stores/game';
+import { storeToRefs } from 'pinia';
+
+const gameStore = useGameStore();
+const { inventory } = storeToRefs(gameStore);
 
 const props = defineProps({
-  inventory: {
-    type: Object,
-    required: true,
-  },
   isCloakActive: {
     type: Boolean,
     default: false,
@@ -377,12 +378,12 @@ const props = defineProps({
 const emit = defineEmits(["close", "use-item"]);
 
 const isInventoryEmpty = computed(() => {
-  for (const key in props.inventory) {
+  for (const key in inventory.value) {
     if (
-      Object.prototype.hasOwnProperty.call(props.inventory, key) &&
-      typeof props.inventory[key] === "number"
+      Object.prototype.hasOwnProperty.call(inventory.value, key) &&
+      typeof inventory.value[key] === "number"
     ) {
-      if (props.inventory[key] > 0) {
+      if (inventory.value[key] > 0) {
         return false;
       }
     }

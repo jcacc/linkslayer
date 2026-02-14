@@ -109,10 +109,14 @@
 
 <script setup>
 import { ref, onMounted, computed, watch } from "vue";
+import { useGameStore } from '@/stores/game';
+import { storeToRefs } from 'pinia';
 import { getRandomShopPhrase } from "@/utils/shopKeeperPhrases";
 
+const gameStore = useGameStore();
+const { playerGold } = storeToRefs(gameStore);
+
 const props = defineProps({
-  playerGold: Number,
   shopItems: Array,
   weaponBonus: Number,
   shieldBonus: Number,
@@ -134,7 +138,7 @@ onMounted(() => {
 });
 
 const canBuySelectedItem = computed(() => {
-  return selectedItem.value && props.playerGold >= selectedItem.value.cost;
+  return selectedItem.value && playerGold.value >= selectedItem.value.cost;
 });
 
 const buyButtonText = computed(() => {
@@ -142,7 +146,7 @@ const buyButtonText = computed(() => {
     return "Select an Item";
   } else if (selectedItem.value.isSpecialLoot) {
     return "Already Acquired";
-  } else if (props.playerGold < selectedItem.value.cost) {
+  } else if (playerGold.value < selectedItem.value.cost) {
     return `Not enough Gold (${selectedItem.value.cost} Gold)`;
   } else {
     return `Buy ${selectedItem.value.name}`;
@@ -150,7 +154,7 @@ const buyButtonText = computed(() => {
 });
 
 watch(
-  () => props.playerGold,
+  playerGold,
   () => {
     if (selectedItem.value) {
     }
@@ -169,7 +173,7 @@ const buyItem = (item) => {
     return;
   }
 
-  if (props.playerGold >= item.cost) {
+  if (playerGold.value >= item.cost) {
     emit("buy", item);
     showToast(`Purchased ${item.name}.`);
   } else {

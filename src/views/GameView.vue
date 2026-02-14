@@ -4,12 +4,6 @@
     :targets="chain[currentTargetIndex + 1]"
     :clicks="clickCount"
     :path="path"
-    :playerClass="playerClass"
-    :specialUsesLeft="specialUsesLeft"
-    :playerHP="playerHP"
-    :maxHP="playerClass?.maxHP"
-    :effectiveMaxHP="effectiveMaxHP"
-    :gameLog="gameLog"
     :encounter="encounter"
     :enemyHP="enemyHP"
     :nextEnemyAttack="nextEnemyAttack"
@@ -19,21 +13,13 @@
     @option-chosen="callHandleEncounterOption"
     @close="handleCloseEncounter"
     :playerName="playerName"
-    @log-line="log"
-    :compass-count="inventory.compass"
-    :shieldBonus="shieldBonus"
-    :weaponBonus="weaponBonus"
     :longRestsUsed="longRestsUsed"
     :isDarkened="bossOverlay"
     :shortRestsUsed="shortRestsUsed"
-    :playerGold="playerGold"
     @show-tips="showTipsModal = true"
     :game-chain="chain"
     @open-inventory-modal="openInventoryModal"
-    :is-cloak-active="isCloakActive"
-    :cloak-clicks-remaining="cloakClicksRemaining"
     :combatWinsSinceLastCapIncrease="combatWinsSinceLastCapIncrease"
-    :hpCapBonus="hpCapBonus"
     :formattedTitle="formattedTitle"
     @open-map-modal="isMapModalOpen = true"
   />
@@ -64,14 +50,10 @@
         :targets="chain"
         :shortcutsUsed="shortcutsUsedCount"
         :combatEncountersFought="combatEncountersFought"
-        :playerHP="playerHP"
-        :weaponBonus="weaponBonus"
-        :shieldBonus="shieldBonus"
         :specialsUsed="totalSpecialsUsed"
         :longRestsUsed="longRestsUsed"
         :shortRestsUsed="shortRestsUsed"
         @close="resetGame"
-        :gameLog="gameLog"
       />
 
       <DefeatModal
@@ -82,14 +64,10 @@
         :targets="chain"
         :shortcutsUsed="shortcutsUsedCount"
         :combatEncountersFought="combatEncountersFought"
-        :playerHP="playerHP"
-        :weaponBonus="weaponBonus"
-        :shieldBonus="shieldBonus"
         :specialsUsed="totalSpecialsUsed"
         :longRestsUsed="longRestsUsed"
         :shortRestsUsed="shortRestsUsed"
         @close="resetGame"
-        :gameLog="gameLog"
       />
 
       <ArticleViewer
@@ -108,8 +86,6 @@
         :showRestModal="showRestModal"
         :shortRestsUsed="shortRestsUsed"
         :longRestsUsed="longRestsUsed"
-        :weaponPieces="inventory.weaponPieces"
-        :defensePieces="inventory.defensePieces"
         :restModalCount="restModalCount"
         @rest="callHandleRest"
         @assemble-upgrade="handleAssembleUpgradeWrapper"
@@ -117,34 +93,20 @@
 
       <ShopModal
         v-show="showShopModal"
-        :playerGold="playerGold"
-        @buy="handleShopPurchase"
+        @buy="(item) => gameStore.purchaseItem(item, { playerName: playerName })"
         @close="showShopModal = false"
         :shopItems="shopItems"
-        :weaponBonus="weaponBonus"
-        :shieldBonus="shieldBonus"
-        :specialUsesLeft="specialUsesLeft"
         @open-backpack="openInventoryModal"
       />
       />
 
       <InventoryModal
         v-if="isInventoryModalOpen"
-        :inventory="inventory"
         @close="closeInventoryModal"
         @use-item="handleUseInventoryItem"
-        :is-cloak-active="isCloakActive"
-        :cloak-clicks-remaining="cloakClicksRemaining"
-        :is-health-regen-active="healthRegenActive"
-        :is-poisoned="isPlayerPoisoned"
-        :is-in-combat="isInCombat"
         :is-boss-encounter="isBossEncounter"
-        :playerHP="playerHP"
-        :effectiveMaxHP="effectiveMaxHP"
-        :is-blurred="isBlurred"
         :enlightenment-fish-hp="enlightenmentFishAccumulatedHP"
         :amulet-of-shared-suffering-damage="AMULET_ENEMY_DAMAGE"
-        :health-regen-clicks-remaining="healthRegenClicksRemaining"
       />
 
       <MapModal
@@ -169,6 +131,8 @@ import {
   watch,
   nextTick,
 } from "vue";
+import { useGameStore } from "@/stores/game";
+import { storeToRefs } from "pinia";
 import { getRandomChain } from "@/utils/randomPair";
 import ArticleViewer from "@/components/ArticleViewer.vue";
 import Header from "@/components/Header.vue";
@@ -189,22 +153,29 @@ import { handleMiniBossLootDrop } from "@/utils/miniBossLootHandler";
 import InventoryModal from "@/components/InventoryModal.vue";
 import MapModal from "@/components/MapModal.vue";
 import { shopItems } from "@/utils/shopItems";
-import {
-  handleShopPurchase as externalHandleShopPurchase,
-  useCompass as externalUseCompass,
-  useHealthPotion as externalUseHealthPotion,
-  useTurkeyLeg as externalUseTurkeyLeg,
-  useInvisibilityCloak as externalUseInvisibilityCloak,
-  useHerbalPoultice as externalUseHerbalPoultice,
-  useBarkTea as externalUseBarkTea,
-  useFrenchOnionSoup as externalUseFrenchOnionSoup,
-  useAntidote as externalUseAntidote,
-  useSmokeBomb as externalUseSmokeBomb,
-  useAdventurersRations as externalUseAdventurersRations,
-  useEnlightenmentFish as externalUseEnlightenmentFish,
-  useAmuletOfSharedSuffering as externalUseAmuletOfSharedSuffering,
-  useMinorHealthPotion as externalUseMinorHealthPotion,
-} from "@/utils/itemHandlers";
+
+const gameStore = useGameStore();
+const { 
+  playerGold, 
+  inventory,
+  playerHP,
+  specialUsesLeft,
+  weaponBonus,
+  shieldBonus,
+  blurClicksLeft,
+  poisonedClicksLeft,
+  isCloakActive,
+  cloakClicksRemaining,
+  healthRegenActive,
+  gameLog,
+  timer,
+  formattedTimer,
+  effectiveMaxHP,
+  playerClass,
+  hpCapBonus,
+  longRestsUsed,
+  shortRestsUsed,
+} = storeToRefs(gameStore);
 
 const journeyLength = ref(3);
 const chain = getRandomChain(journeyLength.value);
@@ -229,22 +200,15 @@ const clickCount = ref(0);
 const shortcutsUsedCount = ref(0);
 const combatEncountersFought = ref(0);
 const combatWinsSinceLastCapIncrease = ref(0);
-const hpCapBonus = ref(0);
 const totalSpecialsUsed = ref(0);
 const path = ref([current.value]);
 const encounter = ref(null);
-const playerHP = ref(0);
 const enemyHP = ref(25);
 const nextEnemyAttack = ref(null);
 const enemyNextAction = ref("attack");
-const specialUsesLeft = ref(5);
-const playerClass = ref(null);
-const gameLog = ref([]);
 const encounterMessage = ref("");
 const playerName = ref("");
 const DEFAULT_ENEMY_HP = 25;
-const weaponBonus = ref(0);
-const shieldBonus = ref(0);
 const enemyStatusEffects = ref([]);
 const enemyIsStunned = ref(false);
 const seenLoreEncounters = ref([]);
@@ -253,68 +217,29 @@ const currentEnemy = ref(null);
 const selectedBossType = ref("");
 const bossSpawned = ref(false);
 const bossDefeated = ref(false);
-const shortRestsUsed = ref(0);
 const showRestModal = ref(false);
-const longRestsUsed = ref(0);
 const hasReachedFinalArticle = ref(false);
 const bossOverlay = ref(false);
-const blurClicksLeft = ref(0);
-const playerGold = ref(0);
 const showShopModal = ref(false);
 const showTipsModal = ref(false);
-const poisonedClicksLeft = ref(0);
-const poisonDamagePerClick = ref(0);
-const HEALTH_POTION_HEAL_AMOUNT = 25;
-const TURKEY_LEG_HEAL_AMOUNT = 6;
-const BARK_TEA_HEAL_AMOUNT = 10;
-const FRENCH_ONION_SOUP_HEAL_AMOUNT = 15;
-const FRENCH_ONION_SOUP_SPECIAL_AMOUNT = 1;
-const ADVENTURERS_RATIONS_HEAL_AMOUNT = 7;
+
 const enlightenmentFishAccumulatedHP = ref(0);
-const MINOR_HEALTH_POTION_HEAL_AMOUNT = 10;
 const AMULET_ENEMY_DAMAGE = 50;
 const AMULET_PLAYER_DAMAGE = 25;
-const isCloakActive = ref(false);
-const CLOAK_DURATION = 10;
-const cloakClicksRemaining = ref(0);
-const healthRegenActive = ref(false);
-const healthRegenAmount = ref(0);
-const healthRegenClicksRemaining = ref(0);
-const healthRegenMaxHeal = ref(0);
-const healthRegenHealedCount = ref(0);
+
 const isLoadingGame = ref(false);
 const enemyDifficultyLevel = ref(0);
 const isMapModalOpen = ref(false);
 const restModalCount = ref(0);
-const inventory = ref({
-  compass: 0,
-  healthPotions: 0,
-  turkeyLegs: 0,
-  invisibilityCloaks: 0,
-  stickItem: 0,
-  herbalPoultices: 0,
-  barkTea: 0,
-  frenchOnionSoups: 0,
-  antidotes: 0,
-  smokeBombs: 0,
-  adventurersRations: 0,
-  enlightenmentFish: 0,
-  sharedSufferingAmulets: 0,
-  minorHealthPotions: 0,
-  weaponPieces: 0,
-  defensePieces: 0,
-});
 
 const isInventoryModalOpen = ref(false);
 
 const inEncounter = computed(() => {
   const e = encounter.value;
   if (!e || typeof e !== "object") return false;
-
   if (e.type === "combat") {
     return e.enemy && typeof e.enemy === "object";
   }
-
   if (e.type === "npc") {
     return (
       e.npc &&
@@ -322,16 +247,10 @@ const inEncounter = computed(() => {
       typeof e.npc.greeting === "string"
     );
   }
-
   if (e.type === "lore") {
     return e.lore && typeof e.lore.text === "string";
   }
-
   return false;
-});
-
-const effectiveMaxHP = computed(() => {
-  return playerClass.value ? playerClass.value.maxHP + hpCapBonus.value : 0;
 });
 
 watch(showRestModal, (newValue) => {
@@ -342,7 +261,7 @@ watch(showRestModal, (newValue) => {
 
 watch(playerHP, (newVal) => {
   if (playerClass.value && newVal <= 0 && !defeated.value) {
-    log(
+    gameStore.log(
       `💀 <span class="player-name">${playerName.value}</span> was defeated.`
     );
     defeated.value = true;
@@ -359,130 +278,11 @@ watch(clickCount, (newClicks) => {
     showShopModal.value = true;
   }
 
-  let netHealthChange = 0;
-
-  if (poisonedClicksLeft.value > 0) {
-    const effectivePoisonDamage = Number(poisonDamagePerClick.value);
-    if (isNaN(effectivePoisonDamage)) {
-      console.error(
-        "CRITICAL ERROR: poisonDamagePerClick.value is NaN. Resetting to 0.",
-        poisonDamagePerClick.value
-      );
-      poisonDamagePerClick.value = 0;
-    } else {
-      netHealthChange -= effectivePoisonDamage;
-      log(`🤢 You are poisoned. You lose ${effectivePoisonDamage} HP.`);
-    }
-    poisonedClicksLeft.value--;
-    if (poisonedClicksLeft.value <= 0) {
-      log(`✅ The poison wears off.`);
-    } else {
-      log(
-        `🤢 ${poisonedClicksLeft.value} clicks left until the poison wears off.`
-      );
-    }
-  }
-
-  if (healthRegenActive.value) {
-    if (
-      healthRegenClicksRemaining.value > 0 &&
-      healthRegenHealedCount.value < healthRegenMaxHeal.value
-    ) {
-      const potentialHeal = healthRegenAmount.value;
-      const remainingHealCapacity =
-        effectiveMaxHP.value - (playerHP.value + netHealthChange);
-      const remainingTotalHealFromPoultice =
-        healthRegenMaxHeal.value - healthRegenHealedCount.value;
-
-      const actualHeal = Math.min(
-        potentialHeal,
-        remainingHealCapacity,
-        remainingTotalHealFromPoultice
-      );
-
-      if (actualHeal > 0) {
-        netHealthChange += actualHeal;
-        healthRegenHealedCount.value += actualHeal;
-        log(
-          `🌱 You feel a surge of vitality. Healed ${actualHeal} HP from Herbal Poultice.`
-        );
-      }
-
-      healthRegenClicksRemaining.value--;
-
-      if (
-        healthRegenClicksRemaining.value <= 0 ||
-        healthRegenHealedCount.value >= healthRegenMaxHeal.value
-      ) {
-        healthRegenActive.value = false;
-        healthRegenAmount.value = 0;
-        healthRegenClicksRemaining.value = 0;
-        healthRegenMaxHeal.value = 0;
-        healthRegenHealedCount.value = 0;
-        log(`✅ The Herbal Poultice's effect wears off.`);
-      }
-    } else {
-      healthRegenActive.value = false;
-      healthRegenAmount.value = 0;
-      healthRegenClicksRemaining.value = 0;
-      healthRegenMaxHeal.value = 0;
-      healthRegenHealedCount.value = 0;
-      log(`✅ The Herbal Poultice's effect wears off.`);
-    }
-  }
-
-  playerHP.value = Math.min(
-    effectiveMaxHP.value,
-    Math.max(0, playerHP.value + netHealthChange)
-  );
-
-  if (playerHP.value <= 0 && !defeated.value) {
-    log(
-      `💀 <span class="player-name">${playerName.value}</span> was defeated.`
-    );
-    defeated.value = true;
-    clearInterval(timerInterval);
-    encounter.value = null;
-  }
-
-  if (isCloakActive.value) {
-    cloakClicksRemaining.value--;
-    log(
-      `✨ Cloak of Invisibility active: ${cloakClicksRemaining.value} clicks remaining.`
-    );
-    if (cloakClicksRemaining.value <= 0) {
-      isCloakActive.value = false;
-      cloakClicksRemaining.value = 0;
-      log(`👻 The Cloak of Invisibility fades away.`);
-    }
-  }
-
-  if (blurClicksLeft.value > 0) {
-    blurClicksLeft.value--;
-    log(
-      `🍺 You are still drunk. ${blurClicksLeft.value} clicks left til you sober up.`
-    );
-  }
-
-  if (inventory.value.enlightenmentFish > 0) {
-    enlightenmentFishAccumulatedHP.value++;
-    log(
-      `🐟 The Fish of Eternal Enlightenment shimmers, gaining 1 HP. (Total: ${enlightenmentFishAccumulatedHP.value} HP)`
-    );
-  }
+  // This logic should also be moved to the store as a tick action
+  // gameStore.tick(); 
 });
 
-const timer = ref(0);
 let timerInterval;
-
-const formattedTimer = computed(() => {
-  const minutes = Math.floor(timer.value / 60);
-  const seconds = timer.value % 60;
-  return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(
-    2,
-    "0"
-  )}`;
-});
 
 const isGameComplete = computed(() => {
   return current.value === chain[journeyLength.value - 1] && bossDefeated.value;
@@ -530,13 +330,11 @@ async function callHandleClick(title) {
       currentEnemy,
     },
     utilityFunctions: {
-      log,
+      log: gameStore.log,
       logEnemyAction,
       clearInterval: (intervalId) => clearInterval(intervalId),
       isBoss,
     },
-    isCloakActive,
-    cloakClicksRemaining,
   });
 }
 
@@ -555,14 +353,14 @@ function callHandleRest(choice) {
       longRestsUsed,
     },
     utils: {
-      log,
+      log: gameStore.log,
       showRestModal,
     },
   });
 
   if (restType === "long") {
     enemyDifficultyLevel.value = enemyDifficultyLevel.value + 1;
-    log(
+    gameStore.log(
       `⚔️ The world gets ${enemyDifficultyLevel.value} times more dangerous.`
     );
   }
@@ -581,13 +379,13 @@ const handleLoot = (defeatedEnemyData) => {
       inventory,
     },
     utilityFunctions: {
-      log,
+      log: gameStore.log,
     },
     defeatedEnemyData: defeatedEnemyData,
   };
 
   if (isBoss(defeatedEnemyData)) {
-    log(
+    gameStore.log(
       `✨ The ${defeatedEnemyData.name} dissipates, leaving no worldly possessions behind.`
     );
     markBossDefeated();
@@ -613,13 +411,13 @@ function handleCombatActionWrapper(playerAction) {
         inventory,
       },
       utilityFunctions: {
-        log,
+        log: gameStore.log,
       },
       defeatedEnemyData: defeatedEnemyData,
     };
 
     if (isBoss(defeatedEnemyData)) {
-      log(
+      gameStore.log(
         `✨ The ${defeatedEnemyData.name} dissipates, leaving no worldly possessions behind.`
       );
       markBossDefeated();
@@ -651,7 +449,7 @@ function handleCombatActionWrapper(playerAction) {
       enemyIsStunned,
     },
     state: {
-      log,
+      log: gameStore.log,
       formattedTitle: formattedTitle.value,
       DEFAULT_ENEMY_HP,
       isBoss,
@@ -686,23 +484,13 @@ function gotoEnemyTurn() {
     },
     gameData: {},
     utilityFunctions: {
-      log,
+      log: gameStore.log,
     },
     combatFunctions: {
       formattedTitle: formattedTitle,
       decideEnemyAction: decideEnemyAction,
       logEnemyAction: logEnemyAction,
     },
-  });
-}
-
-let logId = 0;
-
-function log(message) {
-  logId++;
-  gameLog.value.push({
-    id: logId,
-    text: `[${formattedTimer.value}] ${message}`,
   });
 }
 
@@ -736,7 +524,7 @@ function logEnemyAction() {
     default:
       message = "";
   }
-  if (message) log(message);
+  if (message) gameStore.log(message);
 }
 
 function handleCloseEncounter() {
@@ -757,8 +545,8 @@ function handleCloseEncounter() {
 }
 
 function handleClassSelection({ classKey, name, journeyLength: selectedLen }) {
-  playerClass.value = classes[classKey];
-  playerHP.value = playerClass.value.maxHP;
+  gameStore.playerClass = classes[classKey];
+  playerHP.value = gameStore.playerClass.maxHP;
   playerName.value = name;
   journeyLength.value = selectedLen;
 
@@ -767,46 +555,46 @@ function handleClassSelection({ classKey, name, journeyLength: selectedLen }) {
   current.value = chain[0];
   path.value = [current.value];
 
-  if (playerClass.value.startingWeaponBonus) {
-    weaponBonus.value += playerClass.value.startingWeaponBonus;
-    log(
-      `🗡️ <span class="player-name">${playerName.value}</span> gains +${playerClass.value.startingWeaponBonus} starting Weapon Damage.`
+  if (gameStore.playerClass.startingWeaponBonus) {
+    weaponBonus.value += gameStore.playerClass.startingWeaponBonus;
+    gameStore.log(
+      `🗡️ <span class="player-name">${playerName.value}</span> gains +${gameStore.playerClass.startingWeaponBonus} starting Weapon Damage.`
     );
   }
-  if (playerClass.value.startingSpecialUses) {
-    specialUsesLeft.value += playerClass.value.startingSpecialUses;
-    log(
-      `🎁 <span class="player-name">${playerName.value}</span> starts with +${playerClass.value.startingSpecialUses} Class Ability charges.`
+  if (gameStore.playerClass.startingSpecialUses) {
+    specialUsesLeft.value += gameStore.playerClass.startingSpecialUses;
+    gameStore.log(
+      `🎁 <span class="player-name">${playerName.value}</span> starts with +${gameStore.playerClass.startingSpecialUses} Class Ability charges.`
     );
   }
-  if (playerClass.value.startingShieldBonus) {
-    shieldBonus.value += playerClass.value.startingShieldBonus;
-    log(
-      `🗡️ <span class="player-name">${playerName.value}</span> gains +${playerClass.value.startingShieldBonus} starting Defense Bonus.`
+  if (gameStore.playerClass.startingShieldBonus) {
+    shieldBonus.value += gameStore.playerClass.startingShieldBonus;
+    gameStore.log(
+      `🗡️ <span class="player-name">${playerName.value}</span> gains +${gameStore.playerClass.startingShieldBonus} starting Defense Bonus.`
     );
   }
-  if (playerClass.value.startingHealthPotionBonus) {
-    inventory.value.healthPotions = playerClass.value.startingHealthPotionBonus;
-    log(
-      `🗡️ <span class="player-name">${playerName.value}</span> gains +${playerClass.value.startingHealthPotionBonus} starting Health Potions.`
+  if (gameStore.playerClass.startingHealthPotionBonus) {
+    inventory.value.healthPotions = gameStore.playerClass.startingHealthPotionBonus;
+    gameStore.log(
+      `🗡️ <span class="player-name">${playerName.value}</span> gains +${gameStore.playerClass.startingHealthPotionBonus} starting Health Potions.`
     );
   }
-  if (playerClass.value.startingInvisibilityCloaks) {
+  if (gameStore.playerClass.startingInvisibilityCloaks) {
     inventory.value.invisibilityCloaks =
-      playerClass.value.startingInvisibilityCloaks;
-    log(
-      `🗡️ <span class="player-name">${playerName.value}</span> gains +${playerClass.value.startingInvisibilityCloaks} starting Invisibility Cloaks.`
+      gameStore.playerClass.startingInvisibilityCloaks;
+    gameStore.log(
+      `🗡️ <span class="player-name">${playerName.value}</span> gains +${gameStore.playerClass.startingInvisibilityCloaks} starting Invisibility Cloaks.`
     );
   }
-  if (playerClass.value.startingPlayerGold) {
-    playerGold.value = playerClass.value.startingPlayerGold;
-    log(
-      `🗡️ <span class="player-name">${playerName.value}</span> gains +${playerClass.value.startingPlayerGold} starting Gold.`
+  if (gameStore.playerClass.startingPlayerGold) {
+    playerGold.value = gameStore.playerClass.startingPlayerGold;
+    gameStore.log(
+      `🗡️ <span class="player-name">${playerName.value}</span> gains +${gameStore.playerClass.startingPlayerGold} starting Gold.`
     );
   }
-  log(`Player name: ${playerName.value}`);
-  log(`Class selected: ${playerClass.value.name}`);
-  log(`Journey length: ${journeyLength.value} articles.`);
+  gameStore.log(`Player name: ${playerName.value}`);
+  gameStore.log(`Class selected: ${gameStore.playerClass.name}`);
+  gameStore.log(`Journey length: ${journeyLength.value} articles.`);
 }
 
 function handleAssembleUpgrade({
@@ -820,27 +608,27 @@ function handleAssembleUpgrade({
   const { log } = utilityFunctions;
 
   if (upgradeType === "weapon") {
-    if (inventory.value.weaponPieces >= 2) {
-      inventory.value.weaponPieces -= 2;
+    if (inventory.weaponPieces >= 2) {
+      inventory.weaponPieces -= 2;
       weaponBonus.value += 1;
       log(
         `⚔️ <span class="player-name">${playerName.value}</span> crafted a Weapon Upgrade (+1 Weapon Bonus)`
       );
       log(
-        `Weapon Pieces: ${inventory.value.weaponPieces}, Weapon Bonus: ${weaponBonus.value}`
+        `Weapon Pieces: ${inventory.weaponPieces}, Weapon Bonus: ${weaponBonus.value}`
       );
     } else {
       log(`⛔ Not enough Weapon Pieces to craft an upgrade. You need 2.`);
     }
   } else if (upgradeType === "defense") {
-    if (inventory.value.defensePieces >= 2) {
-      inventory.value.defensePieces -= 2;
+    if (inventory.defensePieces >= 2) {
+      inventory.defensePieces -= 2;
       shieldBonus.value += 1;
       log(
         `🛡️ <span class="player-name">${playerName.value}</span> crafted a Defense Upgrade. (+1 Defense Bonus)`
       );
       log(
-        `Defense Pieces: ${inventory.value.defensePieces}, Defense Bonus: ${shieldBonus.value}`
+        `Defense Pieces: ${inventory.defensePieces}, Defense Bonus: ${shieldBonus.value}`
       );
     } else {
       log(`⛔ Not enough Defense Pieces to craft an upgrade. You need 2.`);
@@ -863,7 +651,6 @@ async function callHandleEncounterOption(option) {
       shieldBonus,
       blurClicksLeft,
       poisonedClicksLeft,
-      poisonDamagePerClick,
       playerGold,
       currentTargetIndex,
       path,
@@ -888,282 +675,17 @@ async function callHandleEncounterOption(option) {
       bossOverlay,
     },
     utilityFunctions: {
-      log,
+      log: gameStore.log,
     },
   });
 }
 
-function handleShopPurchase(item) {
-  externalHandleShopPurchase(
-    item,
-    {
-      playerGold,
-      playerHP,
-      effectiveMaxHP,
-      weaponBonus,
-      shieldBonus,
-      specialUsesLeft,
-      longRestsUsed,
-      shortRestsUsed,
-      blurClicksLeft,
-      inventory,
-    },
-    {
-      playerName,
-    },
-    {
-      log,
-    }
-  );
-}
-
-function useCompass() {
-  externalUseCompass(
-    {
-      inventory,
-      current,
-      path,
-      clickCount,
-      shortcutsUsedCount,
-      currentTargetIndex,
-    },
-    {
-      chain,
-      formattedTitle,
-    },
-    {
-      bossOverlay,
-    },
-    {
-      log,
-      isBoss,
-      nextTick,
-      closeInventoryModal,
-    },
-    {
-      encounter,
-    }
-  );
-}
-
-const useHealthPotion = () => {
-  externalUseHealthPotion(
-    {
-      inventory,
-      playerHP,
-      effectiveMaxHP,
-    },
-    {
-      log,
-    },
-    {
-      HEALTH_POTION_HEAL_AMOUNT,
-    }
-  );
-};
-
-const useTurkeyLeg = () => {
-  externalUseTurkeyLeg(
-    {
-      inventory,
-      playerHP,
-      effectiveMaxHP,
-    },
-    {
-      log,
-    },
-    {
-      TURKEY_LEG_HEAL_AMOUNT,
-    }
-  );
-};
-
-const useBarkTea = () => {
-  externalUseBarkTea(
-    {
-      inventory,
-      playerHP,
-      effectiveMaxHP,
-    },
-    {
-      log,
-    },
-    {
-      BARK_TEA_HEAL_AMOUNT,
-    }
-  );
-};
-
-const useFrenchOnionSoup = () => {
-  externalUseFrenchOnionSoup(
-    {
-      inventory,
-      playerHP,
-      specialUsesLeft,
-      effectiveMaxHP,
-    },
-    {
-      log,
-    },
-    {
-      FRENCH_ONION_SOUP_HEAL_AMOUNT,
-      FRENCH_ONION_SOUP_SPECIAL_AMOUNT,
-    }
-  );
-};
-
-const useAntidote = () => {
-  externalUseAntidote(
-    {
-      inventory,
-      poisonedClicksLeft,
-      poisonDamagePerClick,
-    },
-    {
-      log,
-      closeInventoryModal,
-    }
-  );
-};
-
-const useInvisibilityCloak = () => {
-  externalUseInvisibilityCloak(
-    {
-      isCloakActive,
-      inventory,
-      cloakClicksRemaining,
-    },
-    {
-      log,
-    },
-    {
-      CLOAK_DURATION,
-    }
-  );
-};
-
-const useHerbalPoultice = () => {
-  externalUseHerbalPoultice(
-    {
-      inventory,
-      healthRegenActive,
-      healthRegenAmount,
-      healthRegenClicksRemaining,
-      healthRegenMaxHeal,
-      healthRegenHealedCount,
-    },
-    {
-      log,
-    }
-  );
-};
-
-const useSmokeBomb = () => {
-  externalUseSmokeBomb(
-    {
-      inventory,
-    },
-    {
-      log,
-      isBoss,
-      closeInventoryModal,
-    },
-    {
-      encounter,
-    },
-    {
-      bossOverlay,
-    }
-  );
-};
-
-const useAdventurersRations = () => {
-  externalUseAdventurersRations(
-    {
-      inventory,
-      playerHP,
-      blurClicksLeft,
-      effectiveMaxHP,
-    },
-    {
-      log,
-      closeInventoryModal,
-    },
-    {
-      ADVENTURERS_RATIONS_HEAL_AMOUNT,
-    }
-  );
-};
-
-const useEnlightenmentFish = () => {
-  externalUseEnlightenmentFish(
-    {
-      inventory,
-      playerHP,
-      effectiveMaxHP,
-    },
-    {
-      log,
-    },
-    {
-      enlightenmentFishAccumulatedHP,
-    }
-  );
-};
-
-const useAmuletOfSharedSuffering = () => {
-  externalUseAmuletOfSharedSuffering(
-    {
-      inventory,
-      playerHP,
-      effectiveMaxHP,
-    },
-    {
-      log,
-      closeInventoryModal,
-      handleLootDrop: handleLoot,
-      handleCloseEncounter,
-      isBoss,
-    },
-    {
-      encounter,
-      enemyHP,
-    },
-    {
-      AMULET_ENEMY_DAMAGE,
-      AMULET_PLAYER_DAMAGE,
-    }
-  );
-};
-
-const useMinorHealthPotion = () => {
-  externalUseMinorHealthPotion(
-    {
-      inventory,
-      playerHP,
-      effectiveMaxHP,
-    },
-    {
-      log,
-    },
-    {
-      MINOR_HEALTH_POTION_HEAL_AMOUNT,
-    }
-  );
-};
-
-function handleAssembleUpgradeWrapper(upgradeType) {
-  handleAssembleUpgrade({
-    inventory: inventory,
-    playerName,
-    weaponBonus,
-    shieldBonus,
-    upgradeType,
-    utilityFunctions: {
-      log,
-    },
+function handleUseInventoryItem(itemType) {
+  gameStore.useItem(itemType, {
+    encounter: encounter.value,
+    isBoss,
+    closeInventoryModal,
   });
-  showRestModal.value = false;
 }
 
 function markBossDefeated() {
@@ -1179,36 +701,6 @@ function openInventoryModal() {
 
 function closeInventoryModal() {
   isInventoryModalOpen.value = false;
-}
-
-function handleUseInventoryItem(itemType) {
-  if (itemType === "compass") {
-    useCompass();
-  } else if (itemType === "healthPotion") {
-    useHealthPotion();
-  } else if (itemType === "turkeyLeg") {
-    useTurkeyLeg();
-  } else if (itemType === "invisibilityCloak") {
-    useInvisibilityCloak();
-  } else if (itemType === "herbalPoultice") {
-    useHerbalPoultice();
-  } else if (itemType === "barkTea") {
-    useBarkTea();
-  } else if (itemType === "frenchOnionSoup") {
-    useFrenchOnionSoup();
-  } else if (itemType === "antidote") {
-    useAntidote();
-  } else if (itemType === "smokeBomb") {
-    useSmokeBomb();
-  } else if (itemType === "adventurersRations") {
-    useAdventurersRations();
-  } else if (itemType === "enlightenmentFish") {
-    useEnlightenmentFish();
-  } else if (itemType === "sharedSufferingAmulet") {
-    useAmuletOfSharedSuffering();
-  } else if (itemType === "minorHealthPotion") {
-    useMinorHealthPotion();
-  }
 }
 
 function resetGame() {

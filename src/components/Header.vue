@@ -179,7 +179,7 @@
 
         <div class="log-btns">
           <button
-            v-if="props.gameLog.length > 5"
+            v-if="gameLog.length > 5"
             @click="expanded = !expanded"
             class="tips-button"
           >
@@ -199,9 +199,14 @@
 
 <script setup>
 import { ref, computed, watch, nextTick } from "vue";
+import { useGameStore } from "@/stores/game";
+import { storeToRefs } from "pinia";
 import TipsModal from "./TipsModal.vue";
 import "./styles/headerStyles.css";
 import NotesModal from "./NotesModal.vue";
+
+const gameStore = useGameStore();
+const { playerHP, specialUsesLeft, weaponBonus, shieldBonus, playerGold, gameLog } = storeToRefs(gameStore);
 
 const props = defineProps({
   start: String,
@@ -209,31 +214,20 @@ const props = defineProps({
   clicks: Number,
   path: Array,
   playerClass: Object,
-  specialUsesLeft: Number,
-  playerHP: Number,
   maxHP: Number,
-  gameLog: Array,
   encounter: Object,
   enemyHP: Number,
   nextEnemyAttack: Number,
   enemyNextAction: String,
   message: String,
   playerName: String,
-  weaponBonus: Number,
   shortRestsUsed: Number,
   longRestsUsed: Number,
   formattedTitle: String,
-  shieldBonus: Number,
-  playerGold: Number,
-  hasCompass: Number,
   gameChain: Array,
   isDarkened: {
     type: Boolean,
     default: false,
-  },
-  compassCount: {
-    type: Number,
-    required: true,
   },
   effectiveMaxHP: {
     type: Number,
@@ -261,14 +255,14 @@ const typedGreeting = ref("");
 let typeInterval = null;
 const currentDialogueNodeId = ref(null);
 const expanded = ref(false);
-const visibleLogCount = ref(Math.min(props.gameLog?.length ?? 0, 5));
+const visibleLogCount = ref(Math.min(gameLog.value?.length ?? 0, 5));
 const newLineIds = ref([]);
 const isMapModalOpen = ref(false);
 const containerAnimClass = ref("");
 let containerAnimTimeout = null;
 
 const displayedLog = computed(() => {
-  return expanded.value ? props.gameLog : props.gameLog.slice(-5);
+  return expanded.value ? gameLog.value : gameLog.value.slice(-5);
 });
 
 const visibleLog = computed(() => {
@@ -395,7 +389,7 @@ function triggerAnim(refVar, className, duration = 700) {
 }
 
 watch(
-  () => props.playerHP,
+  playerHP,
   (newVal, oldVal) => {
     if (oldVal !== undefined && newVal !== oldVal) {
       if (newVal > oldVal) {
@@ -495,7 +489,7 @@ watch(currentDialogueNodeId, (newNodeId) => {
 });
 
 watch(
-  () => props.weaponBonus,
+  weaponBonus,
   (newVal, oldVal) => {
     if (oldVal !== undefined && newVal !== oldVal) {
       triggerAnim(weaponAnimClass, "stat-flash");
@@ -504,7 +498,7 @@ watch(
 );
 
 watch(
-  () => props.shieldBonus,
+  shieldBonus,
   (newVal, oldVal) => {
     if (oldVal !== undefined && newVal !== oldVal) {
       triggerAnim(defenseAnimClass, "stat-flash");
@@ -522,7 +516,7 @@ watch(
 );
 
 watch(
-  () => props.playerGold,
+  playerGold,
   (newVal, oldVal) => {
     if (oldVal !== undefined && newVal !== oldVal) {
       if (newVal > oldVal) {
@@ -535,7 +529,7 @@ watch(
 );
 
 watch(
-  () => props.specialUsesLeft,
+  specialUsesLeft,
   (newVal, oldVal) => {
     if (oldVal !== undefined && newVal !== oldVal) {
       if (newVal > oldVal) {
@@ -640,12 +634,12 @@ function startTyping(fullText, type = "combat") {
   }, 10);
 }
 watch(
-  () => props.gameLog.length,
+  () => gameLog.value.length,
   async (newLength, oldLength) => {
     const diff = newLength - visibleLogCount.value;
 
     if (diff > 0) {
-      const newEntries = props.gameLog.slice(-diff);
+      const newEntries = gameLog.value.slice(-diff);
       newLineIds.value = newEntries.map((e) => e.id);
 
       let revealIndex = 0;
@@ -710,7 +704,7 @@ const formattedTitle = computed(() =>
 );
 
 function copyLogToClipboard() {
-  const rawLog = props.gameLog
+  const rawLog = gameLog.value
     .map((entry) => entry.text.replace(/<[^>]*>/g, ""))
     .join("\n");
 
