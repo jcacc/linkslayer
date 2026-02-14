@@ -8,5 +8,5 @@
 
 ## Credits and Acknowledgements
 
-- **Original Author:** Giorgio Motorola - Special thanks to Giorgio for creating the initial version of Linkslayer!
+- **Original Author:** Michael Weatherford (Giorgio Motorola) - Special thanks to Michael for creating the initial version of Linkslayer!
 - **Refactoring Assistance:** This codebase was significantly refactored with the help of Google's Gemini model. Gemini assisted in analyzing the existing architecture and integrating Pinia for improved state management, making the application more modular and maintainable.
