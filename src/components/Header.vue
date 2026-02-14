@@ -716,10 +716,9 @@ function copyLogToClipboard() {
 </script>
 
 <style>
+@import "./styles/CombatAnimations.css";
 body {
   font-family: "Roboto", sans-serif;
   font-optical-sizing: auto;
 }
-
-@import "./styles/CombatAnimations.css";
 </style>

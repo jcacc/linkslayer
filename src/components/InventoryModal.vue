@@ -317,7 +317,7 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits, watch, computed } from "vue";
+import { computed } from "vue";
 import { useGameStore } from '@/stores/game';
 import { storeToRefs } from 'pinia';
 
