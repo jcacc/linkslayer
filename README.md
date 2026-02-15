@@ -4,7 +4,7 @@
 
 ---
 
-<img src="assets/newlogo-nobg.png" alt="D20 Icon"> A Wikipedia Article to Article game built on the foundation of Dungeons & Dragons.
+A Wikipedia Article to Article game built on the foundation of Dungeons & Dragons.
 
 ## How to Run the Game
 
