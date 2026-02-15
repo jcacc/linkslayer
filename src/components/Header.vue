@@ -100,6 +100,7 @@
           </button>
           <button @click="openNotesModal" class="notes-button">Journal</button>
           <button @click="emit('open-map-modal')" class="map-button">Map</button>
+          <button @click="openStatsModal" class="stats-button">Stats</button>
         </div>
       </div>
 
@@ -194,6 +195,7 @@
       </div>
     </div>
     <NotesModal v-if="isNotesModalOpen" @close="closeNotesModal" />
+    <StatsModal v-if="isStatsModalOpen" @close="closeStatsModal" />
   </header>
 </template>
 
@@ -204,6 +206,7 @@ import { storeToRefs } from "pinia";
 import TipsModal from "./TipsModal.vue";
 import "./styles/headerStyles.css";
 import NotesModal from "./NotesModal.vue";
+import StatsModal from "./StatsModal.vue";
 
 const gameStore = useGameStore();
 const { playerHP, specialUsesLeft, weaponBonus, shieldBonus, playerGold, gameLog } = storeToRefs(gameStore);
@@ -287,6 +290,13 @@ const closeNotesModal = () => {
   isNotesModalOpen.value = false;
 };
 
+const isStatsModalOpen = ref(false);
+const openStatsModal = () => {
+  isStatsModalOpen.value = true;
+};
+const closeStatsModal = () => {
+  isStatsModalOpen.value = false;
+};
 
 const currentDialogue = computed(() => {
   if (!props.encounter) return null;

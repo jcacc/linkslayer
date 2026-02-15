@@ -1199,5 +1199,974 @@
         ]
       }
     }
+  },
+  {
+    "id": "lore_028",
+    "text": "A stone sundial stands in a clearing, but the shadow it casts points in the wrong direction. Carved along its edge: 'Time obeys no one, least of all this sundial.'",
+    "options": [
+      {
+        "text": "Adjust the gnomon to correct the shadow.",
+        "result": "item",
+        "details": "shield",
+        "responseText": "The shadow snaps into place and the sundial hums briefly. A faint shimmer envelops you. You feel more protected."
+      },
+      {
+        "text": "Stand in the shadow.",
+        "result": "damage-minor",
+        "responseText": "The shadow is freezing cold. Your bones ache. That was a poor decision."
+      },
+      {
+        "text": "Smash the sundial with your weapon.",
+        "result": "damage",
+        "responseText": "The sundial shatters and a shard bounces directly into your shin. The universe punishes vandalism swiftly."
+      },
+      {
+        "text": "Walk past it. You don't have time for time.",
+        "result": "none",
+        "responseText": "'I have places to be and none of them involve broken clocks.'"
+      }
+    ]
+  },
+  {
+    "id": "lore_029",
+    "text": "You discover a pond that is perfectly still. Not a single ripple. A fish floats motionless at the surface, seemingly frozen in place. It blinks at you.",
+    "options": [
+      {
+        "text": "Reach in and grab the fish.",
+        "result": "item",
+        "details": "health",
+        "responseText": "The fish unfreezes the moment you touch it and slaps you across the face before flopping away. But somehow you feel healed. Fish magic, presumably."
+      },
+      {
+        "text": "Drink from the pond.",
+        "result": "special",
+        "details": "recover",
+        "amount": 3,
+        "responseText": "The water tastes like nothing. Literally nothing. No flavor at all. But you feel remarkably refreshed."
+      },
+      {
+        "text": "Throw a rock into the pond.",
+        "result": "combat",
+        "responseText": "The rock hits the water and the entire pond surface shatters like glass. Something large and angry rises from below."
+      },
+      {
+        "text": "Stare at the fish until it gets uncomfortable.",
+        "result": "none",
+        "responseText": "You stare. The fish stares. Neither of you blinks. Actually, the fish blinks. You win. Nothing else happens."
+      }
+    ]
+  },
+  {
+    "id": "lore_030",
+    "text": "There is a stone archway covered in moss. Through the archway, you can see the same forest you are already standing in, but the colors are slightly different. A sign reads: 'Shortcut. Probably.'",
+    "options": [
+      {
+        "text": "Walk through the archway confidently.",
+        "result": "shortcut",
+        "details": "clicks",
+        "amount": 8,
+        "responseText": "You step through and emerge several miles ahead on the path. The sign was honest. Probably."
+      },
+      {
+        "text": "Throw your boot through first to test it.",
+        "result": "none",
+        "responseText": "Your boot sails through the archway and lands on the other side. You walk around the archway to retrieve it. Nothing happened. You now have a dirty boot."
+      },
+      {
+        "text": "Lick the moss on the archway.",
+        "result": "item",
+        "details": "poison",
+        "amount": 8,
+        "damage": 1,
+        "responseText": "The moss tastes terrible and is mildly toxic. Your tongue swells up. You have been poisoned. Why would you lick moss?"
+      },
+      {
+        "text": "Ignore the archway entirely.",
+        "result": "none",
+        "responseText": "'Shortcuts are for people without principles.' You walk past it with unearned pride."
+      }
+    ]
+  },
+  {
+    "id": "lore_031",
+    "text": "A suit of armor stands upright in the middle of a field. There is no one inside it. It holds a sign that reads 'FREE HUGS'.",
+    "options": [
+      {
+        "text": "Hug the armor.",
+        "result": "damage-minor",
+        "responseText": "The armor snaps shut around you like a bear trap, then releases. That was not a hug. That was an assault."
+      },
+      {
+        "text": "Take parts of the armor for yourself.",
+        "result": "item",
+        "details": "shield",
+        "responseText": "You pry off a well-crafted pauldron and strap it to your shoulder. Your defense increases."
+      },
+      {
+        "text": "Push the armor over.",
+        "result": "combat",
+        "responseText": "The armor clatters to the ground, then slowly reassembles itself and draws a sword from nowhere. It did not appreciate that."
+      },
+      {
+        "text": "Wave politely and keep walking.",
+        "result": "none",
+        "responseText": "The armor waves back. You are now uncomfortable."
+      }
+    ]
+  },
+  {
+    "id": "lore_032",
+    "text": "You come across a wooden signpost at a crossroads. It has four arrows, each pointing in different directions. All four arrows say 'DANGER'.",
+    "options": [
+      {
+        "text": "Go in the direction none of the arrows point.",
+        "result": "shortcut",
+        "details": "clicks",
+        "amount": 5,
+        "responseText": "You find a hidden trail that was deliberately not marked. It leads to a pleasant clearing and saves you considerable travel time."
+      },
+      {
+        "text": "Pick the arrow that looks the most recently painted.",
+        "result": "combat",
+        "responseText": "The freshly painted arrow was a trap set by bandits who wanted to direct travelers into their ambush. You have been directed."
+      },
+      {
+        "text": "Eat one of the arrows.",
+        "result": "damage",
+        "responseText": "You break off an arrow and attempt to eat it. It is made of wood. You now have splinters in your mouth and your gums are bleeding."
+      },
+      {
+        "text": "Sit at the crossroads and contemplate existence.",
+        "result": "none",
+        "responseText": "You sit for twenty minutes. A squirrel judges you from a nearby branch. You learn nothing. You move on."
+      }
+    ]
+  },
+  {
+    "id": "lore_033",
+    "text": "A merchant's cart lies overturned on the road. Crates are scattered everywhere. Most are smashed, but one remains sealed with a wax emblem of a laughing fox.",
+    "options": [
+      {
+        "text": "Open the sealed crate.",
+        "effect": "item",
+        "details": "gold",
+        "amount": 75,
+        "responseText": "Inside the crate is a small fortune in gold coins and a note that reads 'If you're reading this, I'm already dead. Enjoy the gold, you vulture.'"
+      },
+      {
+        "text": "Search the other smashed crates.",
+        "result": "item",
+        "details": "health",
+        "responseText": "Among the debris, you find an intact healing tonic wrapped in straw. Lucky find."
+      },
+      {
+        "text": "Look for the merchant.",
+        "result": "combat",
+        "responseText": "You find the merchant. Well, you find what got the merchant. It sees you now."
+      },
+      {
+        "text": "Right the cart and continue on your way.",
+        "result": "none",
+        "responseText": "You spend fifteen minutes righting the cart out of some misplaced sense of duty. It falls over again immediately. You leave."
+      }
+    ]
+  },
+  {
+    "id": "lore_034",
+    "text": "A rope bridge stretches across a chasm. The bridge looks ancient. Half the planks are missing. A goat stands in the middle of the bridge, chewing on one of the remaining planks.",
+    "options": [
+      {
+        "text": "Shoo the goat and cross carefully.",
+        "result": "shortcut",
+        "details": "clicks",
+        "amount": 7,
+        "responseText": "The goat bleats at you indignantly but moves aside. You cross the bridge, stepping only on the solid planks. The other side puts you well ahead on your journey."
+      },
+      {
+        "text": "Try to ride the goat across.",
+        "result": "damage-major",
+        "responseText": "The goat does not consent to being ridden. It headbutts you off the bridge. You fall, grab a root, and climb back up. Everything hurts."
+      },
+      {
+        "text": "Challenge the goat to a staring contest.",
+        "result": "none",
+        "responseText": "Goats have rectangular pupils. They do not blink like you do. You lose immediately. The goat resumes eating the bridge."
+      },
+      {
+        "text": "Jump over the chasm without using the bridge.",
+        "result": "damage-major",
+        "responseText": "The chasm is forty feet across. You make it about six feet before gravity introduces itself."
+      }
+    ]
+  },
+  {
+    "id": "lore_035_ancient_fountain",
+    "dialogueNodes": {
+      "start": {
+        "text": "You stumble upon an ancient fountain in a ruined courtyard. Water still flows from the mouth of a carved stone lion, though the basin below is cracked and most of the water drains into the earth. Three offering bowls sit on the fountain's rim, each with a different symbol: a sword, a heart, and a coin.",
+        "options": [
+          {
+            "text": "Examine the offering bowls more closely.",
+            "flow": "dialogue_branch",
+            "next_node_id": "examine_bowls"
+          },
+          {
+            "text": "Drink from the fountain.",
+            "flow": "dialogue_branch",
+            "next_node_id": "drink_fountain"
+          },
+          {
+            "text": "Search the courtyard ruins.",
+            "flow": "dialogue_branch",
+            "next_node_id": "search_ruins"
+          },
+          {
+            "text": "Leave. Fountains in ruins are never good news.",
+            "flow": "close_encounter",
+            "responseText": "You walk away from the fountain. The stone lion seems to frown. You do not look back."
+          }
+        ]
+      },
+      "examine_bowls": {
+        "text": "The three bowls are made of tarnished bronze. The sword bowl has a faint red stain. The heart bowl smells like herbs. The coin bowl has a small inscription: 'Give to receive. Or don't. I'm a bowl.'",
+        "options": [
+          {
+            "text": "Place a coin in the coin bowl.",
+            "effect": "item",
+            "details": "gold",
+            "amount": 60,
+            "responseText": "The bowl swallows the coin and the fountain surges. A compartment opens at the lion's base, revealing a satchel of gold coins. The bowl gives more than it takes.",
+            "flow": "close_encounter"
+          },
+          {
+            "text": "Place your hand on the heart bowl.",
+            "result": "item",
+            "details": "health-major",
+            "responseText": "Warmth floods through your body. Your wounds close and your breathing steadies. The heart bowl heals generously.",
+            "flow": "close_encounter"
+          },
+          {
+            "text": "Touch the sword bowl.",
+            "result": "combat",
+            "responseText": "The red stain glows and the stone lion's eyes light up. The fountain erupts and a guardian made of water and stone rises from the basin."
+          },
+          {
+            "text": "Knock all three bowls off the fountain.",
+            "result": "damage",
+            "responseText": "The fountain violently jets water directly into your face with the force of a battering ram. The bowls clatter to the ground. Was it worth it?"
+          }
+        ]
+      },
+      "drink_fountain": {
+        "text": "The water is ice cold and tastes faintly of copper. As you drink, you notice something glinting at the bottom of the cracked basin.",
+        "options": [
+          {
+            "text": "Reach into the basin and grab the glinting object.",
+            "result": "item",
+            "details": "weapon",
+            "responseText": "You pull out a small enchanted stone that pulses with energy. When you press it against your weapon, it hums and the edge sharpens. Damage base increased by 1.",
+            "flow": "close_encounter"
+          },
+          {
+            "text": "Keep drinking. The water is delicious.",
+            "result": "item",
+            "details": "health",
+            "responseText": "You drink deeply. Your stomach gurgles but you feel restored. The copper aftertaste lingers for hours.",
+            "flow": "close_encounter"
+          },
+          {
+            "text": "Leave the basin alone.",
+            "flow": "close_encounter",
+            "responseText": "You step back from the fountain, refreshed but empty-handed."
+          }
+        ]
+      },
+      "search_ruins": {
+        "text": "The courtyard is littered with fallen columns and crumbled walls. Behind a partially collapsed archway, you find a stone chest covered in dust. It has no lock but is extremely heavy.",
+        "options": [
+          {
+            "text": "Use all your strength to open the chest.",
+            "effect": "item",
+            "details": "gold",
+            "amount": 35,
+            "responseText": "The lid grinds open. Inside: a modest pile of ancient coins and a very dead spider. You take the coins and leave the spider.",
+            "flow": "close_encounter"
+          },
+          {
+            "text": "Try to drag the entire chest with you.",
+            "result": "damage-minor",
+            "responseText": "You throw out your back almost immediately. The chest does not move. You move, but painfully.",
+            "flow": "close_encounter"
+          },
+          {
+            "text": "Return to the fountain.",
+            "flow": "dialogue_branch",
+            "next_node_id": "examine_bowls"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "lore_036",
+    "text": "You find a crow sitting on a fence post. The crow is wearing a tiny hat. It tilts its head at you and says, very clearly, 'What?'",
+    "options": [
+      {
+        "text": "'Where did you get that hat?'",
+        "result": "none",
+        "responseText": "The crow looks at you, looks at its hat, looks back at you, and says 'What?' again. This conversation is going nowhere."
+      },
+      {
+        "text": "Offer the crow some food.",
+        "result": "item",
+        "details": "weapon",
+        "responseText": "You toss a scrap of bread. The crow eats it, then drops a small sharpening stone from inside its hat. Your weapon's damage base increases by 1. The crow says 'You're welcome' and flies away."
+      },
+      {
+        "text": "Try to take the hat.",
+        "result": "damage-minor",
+        "responseText": "The crow pecks your hand viciously. It is a small bird with enormous rage. Your hand bleeds. The hat stays on the crow."
+      },
+      {
+        "text": "Bow to the crow respectfully.",
+        "effect": "item",
+        "details": "gold",
+        "amount": 12,
+        "responseText": "The crow bows back, and several gold coins fall out of its hat. The crow seems annoyed but flies away, leaving the coins behind."
+      }
+    ]
+  },
+  {
+    "id": "lore_037",
+    "text": "A massive tree has fallen across the path. Its trunk is carved with hundreds of tiny faces, each with a different expression. One face near eye level appears to be whispering.",
+    "options": [
+      {
+        "text": "Lean in to hear what the face is whispering.",
+        "result": "shortcut",
+        "details": "clicks",
+        "amount": 6,
+        "responseText": "The face whispers directions to a hidden path that bypasses the dense forest ahead. 'Go left at the mushroom, right at the skull, and straight through the hollow log. You're welcome, ugly.'"
+      },
+      {
+        "text": "Whisper back to the face.",
+        "result": "none",
+        "responseText": "You whisper 'hello' back. All the faces on the log simultaneously say 'HELLO' in unison. Then silence. You are deeply unsettled."
+      },
+      {
+        "text": "Climb over the log.",
+        "result": "damage-minor",
+        "responseText": "Several faces bite your hands and legs as you climb. They have tiny wooden teeth. This is horrible."
+      },
+      {
+        "text": "Set the log on fire.",
+        "result": "damage-major",
+        "responseText": "The log erupts into flame immediately, as if soaked in oil. The blast of heat throws you backward. Hundreds of tiny carved faces scream. You smell like smoke and shame."
+      }
+    ]
+  },
+  {
+    "id": "lore_038",
+    "text": "You find a cave entrance with a sign that reads 'ECHO CAVE: Please do not yell. The echo has feelings.' From inside, you hear a faint humming.",
+    "options": [
+      {
+        "text": "Enter the cave quietly and follow the humming.",
+        "result": "item",
+        "details": "health-major",
+        "responseText": "The humming leads you to a small crystal that vibrates with healing energy. You touch it and feel your wounds mend. The echo whispers 'thank you for being quiet.'"
+      },
+      {
+        "text": "Yell into the cave as loud as you can.",
+        "result": "damage",
+        "responseText": "The echo yells back, but louder. Much louder. Your ears ring and your nose bleeds. The sign warned you."
+      },
+      {
+        "text": "Hum along with the echo.",
+        "effect": "item",
+        "details": "gold",
+        "amount": 20,
+        "responseText": "The echo harmonizes with you and a small cache of coins rattles loose from a crack in the wall. The echo seems pleased with the duet."
+      },
+      {
+        "text": "Block the cave entrance with rocks.",
+        "result": "none",
+        "responseText": "You spend thirty minutes stacking rocks. The echo says 'I can still see you through the cracks.' You leave, defeated."
+      }
+    ]
+  },
+  {
+    "id": "lore_039_mushroom_circle",
+    "dialogueNodes": {
+      "start": {
+        "text": "You discover a perfect circle of glowing mushrooms in a moonlit glade. The air inside the circle shimmers faintly. A stone tablet at the circle's edge reads: 'Step inside to bargain. Step outside to live.'",
+        "options": [
+          {
+            "text": "Step into the mushroom circle.",
+            "flow": "dialogue_branch",
+            "next_node_id": "inside_circle"
+          },
+          {
+            "text": "Pick one of the mushrooms.",
+            "result": "item",
+            "details": "poison",
+            "amount": 12,
+            "damage": 2,
+            "responseText": "The mushroom explodes into spores when plucked. You inhale a cloud of glowing toxin. You feel considerably worse about your choices."
+          },
+          {
+            "text": "Walk away. You've read enough fairy tales.",
+            "flow": "close_encounter",
+            "responseText": "You leave the glade behind. The mushrooms dim slightly, as if disappointed."
+          }
+        ]
+      },
+      "inside_circle": {
+        "text": "The moment you step inside, the world goes silent. A voice speaks from everywhere and nowhere: 'Traveler. I offer three bargains. Choose one, or choose to leave with nothing. First: strength for blood. Second: knowledge for time. Third: fortune for risk.'",
+        "options": [
+          {
+            "text": "'I choose strength for blood.'",
+            "flow": "dialogue_branch",
+            "next_node_id": "bargain_strength"
+          },
+          {
+            "text": "'I choose knowledge for time.'",
+            "flow": "dialogue_branch",
+            "next_node_id": "bargain_knowledge"
+          },
+          {
+            "text": "'I choose fortune for risk.'",
+            "flow": "dialogue_branch",
+            "next_node_id": "bargain_fortune"
+          },
+          {
+            "text": "'I choose to leave.'",
+            "flow": "close_encounter",
+            "responseText": "The voice sighs. 'They always leave.' The mushrooms go dark and you find yourself standing outside the circle."
+          }
+        ]
+      },
+      "bargain_strength": {
+        "text": "The voice says: 'Your weapon will grow sharper, but it will cost you pain.' You feel a burning sensation across your skin.",
+        "options": [
+          {
+            "text": "Accept the pain.",
+            "result": "item",
+            "details": "weapon",
+            "responseText": "Searing pain courses through you, then subsides. Your weapon gleams with new sharpness. Damage base increased by 1. You stumble out of the circle, alive but shaken.",
+            "flow": "close_encounter"
+          },
+          {
+            "text": "Refuse and step out of the circle.",
+            "flow": "close_encounter",
+            "responseText": "The pain vanishes. You step out of the circle, intact but empty-handed. The voice mutters 'Coward' under its breath."
+          }
+        ]
+      },
+      "bargain_knowledge": {
+        "text": "The voice says: 'I will show you a path forward, but you will feel as though days have passed in seconds.'",
+        "options": [
+          {
+            "text": "Accept the bargain.",
+            "result": "shortcut",
+            "details": "clicks",
+            "amount": 10,
+            "responseText": "A map burns itself into your mind. You see the path ahead as clearly as if you'd walked it before. You feel exhausted, as though you haven't slept in days, but you know exactly where to go.",
+            "flow": "close_encounter"
+          },
+          {
+            "text": "Refuse and step out of the circle.",
+            "flow": "close_encounter",
+            "responseText": "You step out of the circle. The voice says 'Your loss.' The mushrooms flicker and die."
+          }
+        ]
+      },
+      "bargain_fortune": {
+        "text": "The voice says: 'Gold awaits, but so does danger. Reach into the earth beneath your feet.'",
+        "options": [
+          {
+            "text": "Reach into the earth.",
+            "effect": "item",
+            "details": "gold",
+            "amount": 90,
+            "responseText": "Your hand plunges into soil that parts like water. You pull out a fistful of ancient gold coins. The voice laughs. The mushroom circle vanishes. You are standing in an empty glade, richer than before.",
+            "flow": "close_encounter"
+          },
+          {
+            "text": "Refuse and step out of the circle.",
+            "flow": "close_encounter",
+            "responseText": "You pull your hand back. The voice says nothing. The circle fades."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "lore_040",
+    "text": "You find a skeleton sitting against a tree, holding a piece of parchment. The skeleton is wearing sunglasses. The parchment reads: 'Waited for the bus. Day 4,372. Beginning to think it's not coming.'",
+    "options": [
+      {
+        "text": "Search the skeleton's pockets.",
+        "effect": "item",
+        "details": "gold",
+        "amount": 30,
+        "responseText": "You find a coin purse with 30 gold pieces and an expired bus pass. The skeleton does not object."
+      },
+      {
+        "text": "Take the sunglasses.",
+        "result": "none",
+        "responseText": "You put on the sunglasses. Everything is slightly darker. You do not look cooler. You leave them on a rock and move on."
+      },
+      {
+        "text": "Sit next to the skeleton and wait for the bus.",
+        "result": "none",
+        "responseText": "You sit for an hour. No bus arrives. You begin to understand the skeleton's frustration. You leave before you join it."
+      },
+      {
+        "text": "Give the skeleton a proper burial.",
+        "result": "item",
+        "details": "health",
+        "responseText": "You dig a small grave and lay the skeleton to rest. A warm breeze passes through the trees. You feel at peace, and your health improves slightly."
+      }
+    ]
+  },
+  {
+    "id": "lore_041",
+    "text": "There is a large, flat boulder with a chessboard carved into its surface. The pieces are made of stone and appear to be mid-game. A note carved into the side reads: 'White to move. Checkmate in one. Solve it and claim your prize.' The white queen, knight, bishop, and rook are positioned on the board.",
+    "options": [
+      {
+        "text": "Move the queen.",
+        "result": "none",
+        "responseText": "The black king yawns. That is not checkmate. The pieces reset."
+      },
+      {
+        "text": "Move the knight.",
+        "effect": "item",
+        "details": "gold",
+        "amount": 55,
+        "responseText": "The knight lands with a satisfying click. The black king topples over. A hidden drawer slides open from the boulder, revealing a cache of gold coins. Well played."
+      },
+      {
+        "text": "Move the bishop.",
+        "result": "none",
+        "responseText": "The black king looks at the bishop. The bishop looks at the king. Nothing happens. The pieces reset."
+      },
+      {
+        "text": "Flip the board.",
+        "result": "damage-minor",
+        "responseText": "The stone chessboard weighs about 200 pounds. You strain to flip it, pull a muscle in your back, and accomplish nothing. The stone pieces seem to smirk at you."
+      }
+    ]
+  },
+  {
+    "id": "lore_042_signal_tower",
+    "text": "After climbing a steep hillside, you reach an abandoned signal tower. The beacon at the top is cold and dark, but the mechanism appears functional. A rusted lever juts from the base, and a supply room door hangs ajar.",
+    "options": [
+      {
+        "text": "Pull the lever and light the beacon.",
+        "result": "combat",
+        "responseText": "The beacon roars to life, sending a column of flame into the sky. Unfortunately, it also signals your position to something that has been hunting in the area."
+      },
+      {
+        "text": "Search the supply room.",
+        "result": "item",
+        "details": "health",
+        "responseText": "Inside the supply room, you find dried rations and a sealed flask of medicinal tonic. The rations taste like cardboard but the tonic restores your health."
+      },
+      {
+        "text": "Climb to the top of the tower for a better view.",
+        "result": "shortcut",
+        "details": "clicks",
+        "amount": 4,
+        "responseText": "From the top, you can see the landscape for miles. You spot a clear path through the forest below that will save you significant travel time."
+      },
+      {
+        "text": "Write your name on the tower wall and leave.",
+        "result": "none",
+        "responseText": "You scratch your name into the stone with your blade. No one will ever read it. You feel momentarily famous and then immediately foolish."
+      }
+    ]
+  },
+  {
+    "id": "lore_043",
+    "text": "A perfectly rectangular hole in the ground, about three feet deep, contains exactly one potato. The potato appears to be glowing faintly purple.",
+    "options": [
+      {
+        "text": "Eat the potato.",
+        "result": "item",
+        "details": "health-major",
+        "responseText": "The potato tastes like a regular potato, except it hums as you chew. Your entire body tingles and your health is significantly restored. Magical potato. Who knew."
+      },
+      {
+        "text": "Take the potato with you for later.",
+        "result": "item",
+        "details": "health",
+        "responseText": "You pocket the potato. It pulses gently in your bag like a tiny purple heart. You gain a small amount of health from its proximity alone."
+      },
+      {
+        "text": "Put the potato back and fill in the hole.",
+        "result": "none",
+        "responseText": "You rebury the potato. You feel a profound sense of having accomplished absolutely nothing."
+      },
+      {
+        "text": "Throw the potato as far as you can.",
+        "result": "damage-minor",
+        "responseText": "The potato explodes mid-flight in a burst of purple light. Shrapnel hits you. It was a magic potato and you threw it. Think about what you've done."
+      }
+    ]
+  },
+  {
+    "id": "lore_044_underground_market",
+    "dialogueNodes": {
+      "start": {
+        "text": "You descend a crumbling staircase hidden beneath a fallen obelisk and emerge into an underground market. Torches flicker along the walls. Three merchants sit at crude stalls, each calling out to you. A goblin sells potions, a dwarf sells weapons, and an old woman sells 'secrets'. A tunnel at the far end appears to lead back to the surface.",
+        "options": [
+          {
+            "text": "Approach the goblin potion seller.",
+            "flow": "dialogue_branch",
+            "next_node_id": "goblin_stall"
+          },
+          {
+            "text": "Approach the dwarf weapon seller.",
+            "flow": "dialogue_branch",
+            "next_node_id": "dwarf_stall"
+          },
+          {
+            "text": "Approach the old woman selling secrets.",
+            "flow": "dialogue_branch",
+            "next_node_id": "secrets_stall"
+          },
+          {
+            "text": "Walk straight to the exit tunnel.",
+            "flow": "close_encounter",
+            "responseText": "You walk past all three merchants without stopping. The goblin shouts 'Your loss!' The dwarf shrugs. The old woman cackles. You emerge on the surface, empty-handed."
+          }
+        ]
+      },
+      "goblin_stall": {
+        "text": "The goblin grins at you with too many teeth. 'Potions! Good potions! I have three. Red one heals. Blue one... also heals. Green one is a surprise.' The goblin winks. 'All free today. Marketing strategy.'",
+        "options": [
+          {
+            "text": "Take the red potion.",
+            "result": "item",
+            "details": "health",
+            "responseText": "The red potion tastes like cherry medicine. Your health improves. The goblin nods approvingly.",
+            "flow": "dialogue_branch",
+            "next_node_id": "post_purchase"
+          },
+          {
+            "text": "Take the blue potion.",
+            "result": "item",
+            "details": "health-major",
+            "responseText": "The blue potion tastes like blueberries and lightning. Your health improves significantly. The goblin seems surprised you chose this one.",
+            "flow": "dialogue_branch",
+            "next_node_id": "post_purchase"
+          },
+          {
+            "text": "Take the green potion.",
+            "result": "item",
+            "details": "poison",
+            "amount": 10,
+            "damage": 2,
+            "responseText": "The green potion tastes like lawn clippings and betrayal. It was poison. The goblin shrugs. 'I said it was a surprise.'",
+            "flow": "dialogue_branch",
+            "next_node_id": "post_purchase"
+          },
+          {
+            "text": "Decline and visit another merchant.",
+            "flow": "dialogue_branch",
+            "next_node_id": "post_purchase"
+          }
+        ]
+      },
+      "dwarf_stall": {
+        "text": "The dwarf slams a massive hand on the counter. 'I sharpen blades. Best in the underground. One free sharpening per customer. Company policy.' He gestures at a grinding wheel behind him.",
+        "options": [
+          {
+            "text": "Let him sharpen your weapon.",
+            "result": "item",
+            "details": "weapon",
+            "responseText": "The dwarf works your weapon against the grinding wheel with expert precision. Sparks fly. When he hands it back, the edge could split a hair. Damage base increased by 1.",
+            "flow": "dialogue_branch",
+            "next_node_id": "post_purchase"
+          },
+          {
+            "text": "Ask him to sharpen a rock instead.",
+            "result": "none",
+            "responseText": "The dwarf stares at you for a very long time. 'Get out of my stall.' You leave his stall.",
+            "flow": "dialogue_branch",
+            "next_node_id": "post_purchase"
+          },
+          {
+            "text": "Decline and visit another merchant.",
+            "flow": "dialogue_branch",
+            "next_node_id": "post_purchase"
+          }
+        ]
+      },
+      "secrets_stall": {
+        "text": "The old woman peers at you through milky eyes. 'I sell secrets, dear. I have one for you. The path ahead splits three ways. Two lead to ruin. One leads to fortune. Would you like to know which?'",
+        "options": [
+          {
+            "text": "'Yes, tell me.'",
+            "result": "shortcut",
+            "details": "clicks",
+            "amount": 8,
+            "responseText": "She whispers detailed directions into your ear. The path she describes is one you would never have found on your own. She smiles. 'Now go, before I charge you.'",
+            "flow": "close_encounter"
+          },
+          {
+            "text": "'No, I prefer surprises.'",
+            "result": "none",
+            "responseText": "She shrugs. 'Suit yourself, dear. Most people prefer surprises right up until they don't.'",
+            "flow": "dialogue_branch",
+            "next_node_id": "post_purchase"
+          },
+          {
+            "text": "'How do I know you're telling the truth?'",
+            "result": "none",
+            "responseText": "'You don't.' She smiles. 'That's what makes it a secret and not a fact.' You are not sure if that's profound or nonsense.",
+            "flow": "dialogue_branch",
+            "next_node_id": "post_purchase"
+          }
+        ]
+      },
+      "post_purchase": {
+        "text": "You stand in the middle of the underground market. The three merchants watch you expectantly.",
+        "options": [
+          {
+            "text": "Visit the goblin potion seller.",
+            "flow": "dialogue_branch",
+            "next_node_id": "goblin_stall"
+          },
+          {
+            "text": "Visit the dwarf weapon seller.",
+            "flow": "dialogue_branch",
+            "next_node_id": "dwarf_stall"
+          },
+          {
+            "text": "Visit the old woman selling secrets.",
+            "flow": "dialogue_branch",
+            "next_node_id": "secrets_stall"
+          },
+          {
+            "text": "Head for the exit tunnel.",
+            "flow": "close_encounter",
+            "responseText": "You walk to the far tunnel and climb back to the surface. The market fades behind you like a half-remembered dream."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "lore_045",
+    "text": "You find a door standing upright in the middle of a meadow. There is no wall, no building, no frame. Just a door. It is painted red and has a brass knocker shaped like a fist.",
+    "options": [
+      {
+        "text": "Open the door and walk through.",
+        "result": "shortcut",
+        "details": "clicks",
+        "amount": 5,
+        "responseText": "You step through the door and emerge in an entirely different part of the forest, miles ahead of where you were. You look back. There is no door. There is only forest."
+      },
+      {
+        "text": "Knock on the door using the brass knocker.",
+        "effect": "item",
+        "details": "gold",
+        "amount": 25,
+        "responseText": "You knock three times. The door swings open and a leather pouch falls out of thin air, hits the ground, and spills gold coins. The door closes. No one answers."
+      },
+      {
+        "text": "Walk around to the other side of the door.",
+        "result": "none",
+        "responseText": "The other side of the door looks exactly the same. Red paint, brass knocker. You walk around it three more times. It is a door. In a meadow. You accept this and move on."
+      },
+      {
+        "text": "Kick the door down.",
+        "result": "damage",
+        "responseText": "The door does not budge. Your foot, however, does. It bends in a direction feet should not bend. The brass fist knocker seems to be laughing at you."
+      }
+    ]
+  },
+  {
+    "id": "lore_046_harbor_portal",
+    "text": "You reach a crumbling stone harbor at the edge of a lake. Three ancient boats are docked, each with a destination carved into its bow. A ferryman made entirely of mist stands at the dock, gesturing toward the vessels.",
+    "options": [
+      { "text": "The Moonstone Spires", "routeTitle": "Angkor_Wat" },
+      { "text": "The Driftwood Citadel", "routeTitle": "Venice" },
+      { "text": "The Salt Throne", "routeTitle": "Dead_Sea" },
+      { "text": "The Ember Isles", "routeTitle": "Galápagos_Islands" },
+      {
+        "text": "Decline the ferryman's offer.",
+        "result": "none",
+        "responseText": "The ferryman dissolves into the mist without a word. The boats sink slowly into the lake. The harbor is empty."
+      }
+    ]
+  },
+  {
+    "id": "lore_047",
+    "text": "A weathered wooden barrel sits at the edge of the path. It is sealed with a cork and labeled 'DEFINITELY NOT BEES'. You can hear a faint buzzing from inside.",
+    "options": [
+      {
+        "text": "Open the barrel.",
+        "result": "damage",
+        "responseText": "It was bees. It was always bees. You are stung repeatedly. The label was technically accurate in its inaccuracy."
+      },
+      {
+        "text": "Roll the barrel down the hill.",
+        "result": "none",
+        "responseText": "The barrel rolls away, buzzing angrily. Somewhere in the distance, you hear it crash and then a lot of screaming. Not your problem."
+      },
+      {
+        "text": "Carefully peek under the cork without removing it.",
+        "result": "item",
+        "details": "health",
+        "responseText": "Through the tiny gap, you see not bees but a jar of honey sitting atop a pile of dead bees. You extract the honey. It is medicinal-grade and restores your health."
+      },
+      {
+        "text": "Yell 'I KNOW YOU'RE BEES' at the barrel.",
+        "result": "none",
+        "responseText": "The buzzing stops. There is a brief silence. Then the buzzing resumes, louder and angrier. You walk away."
+      }
+    ]
+  },
+  {
+    "id": "lore_048",
+    "text": "You find a set of standing stones arranged in a triangle. In the center, a metal spike protrudes from the ground with three rings around it: gold, silver, and iron. Lightning flickers between the stones despite the clear sky. A plaque reads: 'Remove one ring. Choose wisely. Choose quickly.'",
+    "options": [
+      {
+        "text": "Remove the gold ring.",
+        "effect": "item",
+        "details": "gold",
+        "amount": 80,
+        "responseText": "The gold ring slides off the spike easily. The lightning stops. The standing stones go dark. The ring is heavy and pure. You pocket it and its considerable value."
+      },
+      {
+        "text": "Remove the silver ring.",
+        "result": "item",
+        "details": "shield",
+        "responseText": "The silver ring hums as you pull it free. A protective aura wraps around you like a second skin. The lightning fades. Your defense increases."
+      },
+      {
+        "text": "Remove the iron ring.",
+        "result": "item",
+        "details": "weapon",
+        "responseText": "The iron ring is warm to the touch. As you remove it, energy crackles through your weapon. The edge gleams with latent force. Damage base increased by 1."
+      },
+      {
+        "text": "Remove all three rings at once.",
+        "result": "damage-major",
+        "responseText": "Lightning from all three standing stones converges on the spike and detonates. You are launched thirty feet through the air. The rings are gone. So is most of your dignity."
+      }
+    ]
+  },
+  {
+    "id": "lore_049_collapsed_library",
+    "dialogueNodes": {
+      "start": {
+        "text": "You find a half-collapsed stone building. A faded sign above the entrance reads 'THE LIBRARY OF THREN'. Most of the ceiling is gone and books are scattered everywhere, many ruined by weather. A few shelves still stand inside, and you can see a staircase leading down to a lower level.",
+        "options": [
+          {
+            "text": "Browse the surviving shelves.",
+            "flow": "dialogue_branch",
+            "next_node_id": "browse_shelves"
+          },
+          {
+            "text": "Descend the staircase to the lower level.",
+            "flow": "dialogue_branch",
+            "next_node_id": "lower_level"
+          },
+          {
+            "text": "Search through the scattered books on the floor.",
+            "result": "none",
+            "responseText": "Most of the books are waterlogged pulp. One appears to be a cookbook. The recipe for 'Dragon Flank Stew' is interesting but ultimately useless. You find nothing of value."
+          },
+          {
+            "text": "Leave the library. You were never much of a reader.",
+            "flow": "close_encounter",
+            "responseText": "You turn away from the ruined library. Knowledge is overrated anyway."
+          }
+        ]
+      },
+      "browse_shelves": {
+        "text": "Three books remain on the shelves, each with a distinct spine. One is bound in red leather with the title 'The Art of War, Abridged'. Another is blue with the title 'Healing Herbs of the Western Marches'. The third is black with no title at all.",
+        "options": [
+          {
+            "text": "Read 'The Art of War, Abridged'.",
+            "result": "item",
+            "details": "weapon",
+            "responseText": "The book contains exactly one page. It reads: 'Hit them before they hit you. Hit them harder than they hit you. Repeat.' Somehow, this obvious advice sharpens your combat instincts. Damage base increased by 1.",
+            "flow": "dialogue_branch",
+            "next_node_id": "post_shelves"
+          },
+          {
+            "text": "Read 'Healing Herbs of the Western Marches'.",
+            "result": "item",
+            "details": "health-major",
+            "responseText": "The book describes several herbs growing nearby that you had walked past without noticing. You gather them and prepare a crude but effective remedy. Your health is significantly restored.",
+            "flow": "dialogue_branch",
+            "next_node_id": "post_shelves"
+          },
+          {
+            "text": "Read the black book with no title.",
+            "result": "damage",
+            "responseText": "The book is blank except for the last page, which reads 'You shouldn't have opened this.' The book snaps shut and a burst of dark energy hits you square in the chest. Lesson learned.",
+            "flow": "dialogue_branch",
+            "next_node_id": "post_shelves"
+          },
+          {
+            "text": "Go downstairs instead.",
+            "flow": "dialogue_branch",
+            "next_node_id": "lower_level"
+          }
+        ]
+      },
+      "post_shelves": {
+        "text": "You've examined the shelves. The staircase to the lower level still beckons.",
+        "options": [
+          {
+            "text": "Descend to the lower level.",
+            "flow": "dialogue_branch",
+            "next_node_id": "lower_level"
+          },
+          {
+            "text": "Leave the library.",
+            "flow": "close_encounter",
+            "responseText": "You've had enough of this library. You step back into the daylight."
+          }
+        ]
+      },
+      "lower_level": {
+        "text": "The lower level is surprisingly intact. Stone walls keep the weather out. In the center of the room is a pedestal with a glass case. Inside the case is a single scroll. The case has no visible lock or latch. A brass plate on the pedestal reads: 'To open, answer: What has keys but no locks, space but no room, and you can enter but cannot go inside?'",
+        "options": [
+          {
+            "text": "'A keyboard.'",
+            "effect": "item",
+            "details": "gold",
+            "amount": 100,
+            "responseText": "The glass case dissolves into thin air. You unroll the scroll. It's a deed to a forgotten treasury, with directions to a cache buried nearby. You dig where indicated and find a chest of gold. The Library of Thren delivers.",
+            "flow": "close_encounter"
+          },
+          {
+            "text": "'A map.'",
+            "result": "none",
+            "responseText": "The glass case does not open. The brass plate seems to sigh. That is not the answer.",
+            "flow": "dialogue_branch",
+            "next_node_id": "lower_level"
+          },
+          {
+            "text": "'A house.'",
+            "result": "none",
+            "responseText": "Nothing happens. The pedestal remains sealed. The scroll taunts you from behind the glass.",
+            "flow": "dialogue_branch",
+            "next_node_id": "lower_level"
+          },
+          {
+            "text": "Smash the glass case.",
+            "result": "damage-major",
+            "responseText": "The glass explodes outward with tremendous force, shredding the scroll and peppering you with shards. The pedestal crumbles. Whatever was on that scroll is gone forever. So is a fair amount of your health.",
+            "flow": "close_encounter"
+          }
+        ]
+      }
+    }
   }
 ]

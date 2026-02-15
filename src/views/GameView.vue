@@ -155,6 +155,7 @@ import { handleMiniBossLootDrop } from "@/utils/miniBossLootHandler";
 import InventoryModal from "@/components/InventoryModal.vue";
 import MapModal from "@/components/MapModal.vue";
 import { shopItems } from "@/utils/shopItems";
+import { saveRun } from "@/utils/statsStorage";
 
 const gameStore = useGameStore();
 const { 
@@ -202,6 +203,8 @@ const clickCount = ref(0);
 const shortcutsUsedCount = ref(0);
 const combatEncountersFought = ref(0);
 const combatWinsSinceLastCapIncrease = ref(0);
+const totalEncounters = ref(0);
+const lastEncounterClick = ref(0);
 const totalSpecialsUsed = ref(0);
 const path = ref([current.value]);
 const encounter = ref(null);
@@ -267,6 +270,7 @@ watch(playerHP, (newVal) => {
       `💀 <span class="player-name">${playerName.value}</span> was defeated.`
     );
     defeated.value = true;
+    saveRunData('defeat');
     clearInterval(timerInterval);
     encounter.value = null;
   }
@@ -276,12 +280,13 @@ watch(clickCount, (newClicks) => {
   if (newClicks > 0 && newClicks % 12 === 0) {
     showRestModal.value = true;
   }
-  if (newClicks > 0 && newClicks % 10 === 0 && !showRestModal.value) {
+});
+
+// Show shop when reaching a checkpoint (target article)
+watch(currentTargetIndex, (newIdx, oldIdx) => {
+  if (newIdx > oldIdx && newIdx < journeyLength.value - 1) {
     showShopModal.value = true;
   }
-
-  // This logic should also be moved to the store as a tick action
-  // gameStore.tick(); 
 });
 
 let timerInterval;
@@ -301,6 +306,8 @@ async function callHandleClick(title) {
       currentTargetIndex,
       combatEncountersFought,
       combatWinsSinceLastCapIncrease,
+      totalEncounters,
+      lastEncounterClick,
     },
     gameData: {
       enemyDifficultyLevel,
@@ -337,6 +344,8 @@ async function callHandleClick(title) {
       clearInterval: (intervalId) => clearInterval(intervalId),
       isBoss,
     },
+    isCloakActive,
+    cloakClicksRemaining,
   });
 }
 
@@ -704,6 +713,35 @@ function openInventoryModal() {
 function closeInventoryModal() {
   isInventoryModalOpen.value = false;
 }
+
+const runSaved = ref(false);
+
+function saveRunData(result) {
+  if (runSaved.value) return;
+  runSaved.value = true;
+  saveRun({
+    result,
+    playerName: playerName.value,
+    playerClass: playerClass.value?.name || 'Unknown',
+    journeyLength: journeyLength.value,
+    clicks: clickCount.value,
+    timer: formattedTimer.value,
+    timerSeconds: timer.value,
+    shortcutsUsed: shortcutsUsedCount.value,
+    combatEncounters: combatEncountersFought.value,
+    specialsUsed: totalSpecialsUsed.value,
+    longRestsUsed: longRestsUsed.value,
+    shortRestsUsed: shortRestsUsed.value,
+    playerHP: playerHP.value,
+    weaponBonus: weaponBonus.value,
+    shieldBonus: shieldBonus.value,
+    gold: playerGold.value,
+  });
+}
+
+watch(isGameComplete, (val) => {
+  if (val) saveRunData('victory');
+});
 
 function resetGame() {
   isLoadingGame.value = true;

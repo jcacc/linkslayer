@@ -42,9 +42,9 @@ export async function handleClick({
 
   let encounterPreventedByCloak = false;
 
-  if (isCloakActive.value && title !== finalTarget) {
+  if (isCloakActive?.value && title !== finalTarget) {
     utilityFunctions.log(
-      `✨ Cloak of Invisibility active: ${cloakClicksRemaining.value} clicks remaining.`
+      `✨ Cloak of Invisibility active: ${cloakClicksRemaining?.value ?? 0} clicks remaining.`
     );
     utilityFunctions.log(
       "👻 You slip past unseen thanks to the Cloak of Invisibility."
@@ -91,76 +91,93 @@ export async function handleClick({
     return;
   }
 
-  if (
+  // Rest checkpoint every 12 clicks (doesn't block encounter pity timer)
+  const isRestClick =
     playerState.clickCount.value > 0 &&
     playerState.clickCount.value % 12 === 0 &&
-    !encounterPreventedByCloak
-  ) {
+    !encounterPreventedByCloak;
+
+  if (isRestClick) {
     modalState.showRestModal.value = true;
-    return;
   }
-  if (
-    playerState.clickCount.value > 0 &&
-    playerState.clickCount.value % 10 === 0 &&
-    !modalState.showRestModal.value &&
-    !encounterPreventedByCloak
-  ) {
-    modalState.showShopModal.value = true;
-    return;
-  }
+
+  // Encounter rate: starts at 0.85, scales +0.01 per encounter (any type), caps at 0.95.
+  // Pity timer: guaranteed encounter if 5+ clicks since the last one.
+  const clicksSinceLast = playerState.clickCount.value - (playerState.lastEncounterClick?.value ?? 0);
+  const baseRate = Math.min(0.85 + (playerState.totalEncounters?.value ?? 0) * 0.01, 0.95);
+  const shouldEncounter = clicksSinceLast >= 5 || Math.random() < baseRate;
+
+  const locationName = gameData.formattedTitle.value;
+
+  const CONTEXT_INTROS = [
+    (loc) => `While reading about <strong>${loc}</strong>, something catches your eye...`,
+    (loc) => `The path near <strong>${loc}</strong> grows quiet. Too quiet.`,
+    (loc) => `A rustling in the brush around <strong>${loc}</strong> stops you in your tracks.`,
+    (loc) => `Somewhere between the lines of <strong>${loc}</strong>, you sense a presence.`,
+    (loc) => `The shadows around <strong>${loc}</strong> shift unexpectedly.`,
+    (loc) => `As you study <strong>${loc}</strong>, a voice calls out from nearby.`,
+    (loc) => `Something stirs in the margins of <strong>${loc}</strong>.`,
+    (loc) => `Your journey through <strong>${loc}</strong> takes an unexpected turn.`,
+  ];
 
   if (
     title !== finalTarget &&
     !encounterPreventedByCloak &&
-    Math.random() < 0.75
+    !isRestClick &&
+    shouldEncounter
   ) {
-    const roll = rollEncounter(enemyDifficultyLevel.value);
     let fullEncounter = null;
 
-    if (roll.type === "npc") {
-      const availableNPCs = friendlyEncounters.filter(
-        (npc) => !gameData.seenNPCEncounters.value.includes(npc.id)
-      );
-      if (availableNPCs.length === 0) {
-        console.warn("All NPCs seen, skipping NPC encounter.");
-      } else {
-        const npc =
-          availableNPCs[Math.floor(Math.random() * availableNPCs.length)];
-        gameData.seenNPCEncounters.value.push(npc.id);
-        fullEncounter = { type: "npc", npc };
-        utilityFunctions.log(`${npc.greeting}`);
-      }
-    } else if (roll.type === "lore") {
-      const availableLore = loreEncounters.filter(
-        (lore) => !gameData.seenLoreEncounters.value.includes(lore.id)
-      );
-      if (availableLore.length === 0) {
-        console.warn("All lore seen, skipping lore encounter.");
-      } else {
-        const lore =
-          availableLore[Math.floor(Math.random() * availableLore.length)];
-        gameData.seenLoreEncounters.value.push(lore.id);
-        fullEncounter = { type: "lore", lore };
-        utilityFunctions.log(`${lore.text}`);
-      }
-    } else if (roll.type === "combat") {
-      const enemy = roll.enemy;
-      if (!enemy) {
-        console.warn("Could not generate enemy, skipping combat encounter.");
-      } else {
-        fullEncounter = roll;
-        enemyState.enemyHP.value = enemy.currentHP;
-        enemyState.currentEnemy.value = enemy;
-        playerState.combatEncountersFought.value++;
-      }
+    // Try up to 3 rolls to avoid silent failures when NPC/lore pools are exhausted
+    for (let attempt = 0; attempt < 3 && !fullEncounter; attempt++) {
+      const roll = rollEncounter(enemyDifficultyLevel.value);
 
-      enemyState.nextEnemyAttack.value =
-        Math.floor(Math.random() * (enemy.maxDamage - enemy.minDamage + 1)) +
-        enemy.minDamage;
-      enemyState.enemyNextAction.value = "attack";
+      if (roll.type === "npc") {
+        const availableNPCs = friendlyEncounters.filter(
+          (npc) => !gameData.seenNPCEncounters.value.includes(npc.id)
+        );
+        if (availableNPCs.length > 0) {
+          const npc =
+            availableNPCs[Math.floor(Math.random() * availableNPCs.length)];
+          gameData.seenNPCEncounters.value.push(npc.id);
+          fullEncounter = { type: "npc", npc };
+          utilityFunctions.log(`${npc.greeting}`);
+        }
+      } else if (roll.type === "lore") {
+        const availableLore = loreEncounters.filter(
+          (lore) => !gameData.seenLoreEncounters.value.includes(lore.id)
+        );
+        if (availableLore.length > 0) {
+          const lore =
+            availableLore[Math.floor(Math.random() * availableLore.length)];
+          gameData.seenLoreEncounters.value.push(lore.id);
+          fullEncounter = { type: "lore", lore };
+          utilityFunctions.log(`${lore.text}`);
+        }
+      } else if (roll.type === "combat") {
+        const enemy = roll.enemy;
+        if (enemy) {
+          fullEncounter = roll;
+          enemyState.enemyHP.value = enemy.currentHP;
+          enemyState.currentEnemy.value = enemy;
+          playerState.combatEncountersFought.value++;
+
+          enemyState.nextEnemyAttack.value =
+            Math.floor(Math.random() * (enemy.maxDamage - enemy.minDamage + 1)) +
+            enemy.minDamage;
+          enemyState.enemyNextAction.value = "attack";
+        }
+      }
     }
 
     if (fullEncounter) {
+      // ~50% chance to log a contextual intro referencing the current article
+      if (Math.random() < 0.5) {
+        const intro = CONTEXT_INTROS[Math.floor(Math.random() * CONTEXT_INTROS.length)];
+        utilityFunctions.log(intro(locationName));
+      }
+      if (playerState.lastEncounterClick) playerState.lastEncounterClick.value = playerState.clickCount.value;
+      if (playerState.totalEncounters) playerState.totalEncounters.value++;
       enemyState.encounter.value = fullEncounter;
 
       if (fullEncounter.type === "combat") {
