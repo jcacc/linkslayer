@@ -4,7 +4,26 @@
 
 ---
 
-<img src="/d20.png" alt="D20 Icon" width="20"> A Wikipedia Article to Article game built on the foundation of Dungeons & Dragons.
+A Wikipedia Article to Article game built on the foundation of Dungeons & Dragons.
+
+## How to Run the Game
+
+To get a local copy up and running, follow these simple steps:
+
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/jcacc/linkslayer.git
+    cd linkslayer
+    ```
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+3.  **Run the development server:**
+    ```bash
+    npm run dev
+    ```
+    The game should now be running in your browser at the address provided by Vite (usually `http://localhost:5173`).
 
 ## How to Run the Game
 
