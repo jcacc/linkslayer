@@ -112,7 +112,7 @@ export async function handleClick({
   if (
     title !== finalTarget &&
     !encounterPreventedByCloak &&
-    Math.random() < 0.4
+    Math.random() < 0.75
   ) {
     const roll = rollEncounter(enemyDifficultyLevel.value);
     let fullEncounter = null;
