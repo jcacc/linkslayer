@@ -113,6 +113,8 @@
         v-if="isMapModalOpen"
         :fullChain="chain"
         :currentTargetIndex="currentTargetIndex"
+        :currentArticle="current"
+        :path="path"
         @close="isMapModalOpen = false"
       />
     </div>
